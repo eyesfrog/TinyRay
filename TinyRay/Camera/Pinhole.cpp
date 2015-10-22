@@ -63,7 +63,7 @@ Pinhole::render_scene(const World& w)
     RGBColor L;
     ViewPlane vp(w.vp);
     Ray ray;
-    int depth = 0;
+    //int depth = 0;
     Point2D pp;
     Point2D sp;
     //int n = int(sqrt(float(vp.num_samples)));
@@ -72,7 +72,7 @@ Pinhole::render_scene(const World& w)
     
     ray.o = eye;
     
-    FILE *f = fopen("image.jpg", "w");
+    FILE *f = fopen("/Users/eyefrog/Desktop/image.bmp", "w");
     fprintf(f, "P3\n%d %d\n%d\n", vp.hres, vp.vres, 255);
     
     for (int r = vp.vres - 1; r >= 0; --r) {
@@ -83,7 +83,7 @@ Pinhole::render_scene(const World& w)
                 pp.x = vp.s * (c - 0.5 * vp.hres + sp.x);
                 pp.y = vp.s * (r - 0.5 * vp.vres + sp.y); 
                 ray.d = get_direction(pp);
-                L += w.tracer_ptr->trace_ray(ray, depth);
+                L += w.tracer_ptr->trace_ray(ray);
             }
             L /= vp.num_samples;
             L *= exposure_time;

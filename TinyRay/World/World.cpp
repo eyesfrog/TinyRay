@@ -707,25 +707,31 @@ void World::display() const
     
     if(SDL_Init(SDL_INIT_VIDEO) != 0) {
         fprintf(stderr, "SDL_Init failed\n");
+        return;
     }
+    
+    atexit(SDL_Quit);
     
     screen = SDL_SetVideoMode(vp.hres, vp.vres, 32, SDL_SWSURFACE);
     
     if(screen == NULL) {
         SDL_Quit();
         fprintf(stderr, "SDL_SetVideoMode failed\n");
+        return;
     }
     
     SDL_WM_SetCaption("TinyRay", NULL);
     
-    image = IMG_Load("image.jpg");
+    image = IMG_Load("/Users/eyefrog/Desktop/image.bmp");
     
     if (image == NULL) {
         SDL_Quit();
-        fprintf(stderr, "IMG_Load failed\n");
+        fprintf(stderr, "IMG_Load failed\n");        return;
     }
     
     SDL_BlitSurface(image, NULL, screen, NULL);
+    
+    //SDL_UpdateRect(screen, 0, 0, image->w, image->h); 
     
     SDL_Flip( screen );
     
@@ -736,6 +742,7 @@ void World::display() const
             }
         }
     }
+
     
     SDL_FreeSurface(image);
 
