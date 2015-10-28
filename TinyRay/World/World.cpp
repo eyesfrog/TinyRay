@@ -72,19 +72,19 @@ World::~World()
 void
 World::build()
 {
-    int num_samples = 25;
+    int num_samples = 16;
+    
     vp.set_hres(600);
     vp.set_vres(600);
-    vp.set_samples(num_samples);
-    vp.set_max_depth(10);
+    vp.set_pixel_size(1);
+    vp.set_samples(num_samples);  
     
-    back_ground_color = black;
     tracer_ptr = new RayCast(this);
-
+    
     Pinhole* pinhole_ptr = new Pinhole;
     pinhole_ptr->set_eye(0, 0, 10000);
     pinhole_ptr->set_lookat(0.0);   
-    pinhole_ptr->set_view_distance(15000);	
+    pinhole_ptr->set_view_distance(30000);	
     pinhole_ptr->compute_uvw(); 
     set_camera(pinhole_ptr);
     
@@ -96,16 +96,13 @@ World::build()
     add_light(light_ptr);
     
     
-    // colors
     
-    float a = 0.75;  // scaling factor for yellow, orange, and light green
-    
-    RGBColor yellow(a * 1, a * 1, 0);								// yellow
+    RGBColor yellow(1, 1, 0);								// yellow
     RGBColor brown(0.71, 0.40, 0.16);								// brown
     RGBColor dark_green(0.0, 0.41, 0.41);							// dark_green
-    RGBColor orange(a * 1, a * 0.75, 0);							// orange
+    RGBColor orange(1, 0.75, 0);							// orange
     RGBColor green(0, 0.6, 0.3);									// green
-    RGBColor light_green(a * 0.65, a * 1, a * 0.30);				// light green
+    RGBColor light_green(0.65, 1, 0.30);				// light green
     RGBColor dark_yellow(0.61, 0.61, 0);							// dark yellow
     RGBColor light_purple(0.65, 0.3, 1);							// light purple
     RGBColor dark_purple(0.5, 0, 1);								// dark purple
@@ -540,6 +537,145 @@ World::build()
     Sphere*	sphere_ptr35 = new Sphere(Point3D(-3, -72, -130), 12); 
     sphere_ptr35->set_material(phong_ptr35);							// light purple
     add_object(sphere_ptr35);
+    /*
+    int num_samples = 16;
+    
+    vp.set_hres(600);	  		
+    vp.set_vres(600);        
+    vp.set_samples(num_samples);
+    vp.set_max_depth(20);	
+    
+    tracer_ptr = new Whitted(this);
+    
+    Pinhole* pinhole_ptr = new Pinhole;
+    
+    pinhole_ptr->set_eye(7.5, 3, 9.5);
+    pinhole_ptr->set_lookat(0);
+    pinhole_ptr->set_view_distance(300);
+    pinhole_ptr->compute_uvw(); 
+    set_camera(pinhole_ptr);
+    
+    PointLight* light_ptr1 = new PointLight;
+    light_ptr1->set_location(10, 10, 0); 
+    light_ptr1->scale_radiance(2.0); 
+    light_ptr1->set_shadows(true); 
+    add_light(light_ptr1);
+    
+    PointLight* light_ptr2 = new PointLight;
+    light_ptr2->set_location(0, 10, 10); 
+    light_ptr2->scale_radiance(2.0); 
+    light_ptr2->set_shadows(true); 
+    add_light(light_ptr2);
+    
+    PointLight* light_ptr3 = new PointLight;
+    light_ptr3->set_location(-10, 10, 0); 
+    light_ptr3->scale_radiance(2.0); 
+    light_ptr3->set_shadows(true); 
+    add_light(light_ptr3);
+    
+    PointLight* light_ptr4 = new PointLight;
+    light_ptr4->set_location(0, 10, -10); 
+    light_ptr4->scale_radiance(2.0); 
+    light_ptr4->set_shadows(true); 
+    add_light(light_ptr4);
+    
+    Reflective* reflective_ptr1 = new Reflective;			
+    reflective_ptr1->set_ka(0.1); 
+    reflective_ptr1->set_kd(0.4); 
+    reflective_ptr1->set_cd(0.6);
+    reflective_ptr1->set_ks(0.25);
+    reflective_ptr1->set_exp(100.0);
+    reflective_ptr1->set_kr(0.75); 
+    reflective_ptr1->set_cr(1, 1, 1);
+    
+    Sphere*	sphere_ptr1 = new Sphere(Point3D(0, 0.5, 0), 4); 
+    sphere_ptr1->set_material(reflective_ptr1);
+    add_object(sphere_ptr1);
+    
+    double room_size = 11.0;
+    
+    Matte* matte_ptr1 = new Matte;
+    matte_ptr1->set_ka(0.50);   
+    matte_ptr1->set_kd(0.50);
+    matte_ptr1->set_cd(1);
+    
+    Plane* ceiling_ptr = new Plane(Point3D(0, room_size,  0), Normal(0, -1, 0));
+    ceiling_ptr->set_material(matte_ptr1);        
+    add_object(ceiling_ptr);
+    
+    Matte* matte_ptr3 = new Matte;
+    matte_ptr3->set_ka(0.15); 
+    matte_ptr3->set_kd(0.60);
+    matte_ptr3->set_cd(0.5, 0.5, 0.75);
+    
+    Plane* backWall_ptr = new Plane(Point3D(0, 0,  -room_size), Normal(0, 0, 1));
+    backWall_ptr->set_material(matte_ptr3);        
+    add_object(backWall_ptr);
+    
+    Plane* frontWall_ptr = new Plane(Point3D(0, 0,  room_size), Normal(0, 0, -1));
+    frontWall_ptr->set_material(matte_ptr3);        
+    add_object(frontWall_ptr);
+    
+    Matte* matte_ptr4 = new Matte;
+    matte_ptr4->set_ka(0.15); 
+    matte_ptr4->set_kd(0.60);
+    matte_ptr4->set_cd(0.75, 0.50, 0.50);
+    
+    Plane* leftWall_ptr = new Plane(Point3D(-room_size, 0, 0), Normal(1, 0, 0));
+    leftWall_ptr->set_material(matte_ptr4);        
+    add_object(leftWall_ptr);
+    
+    Plane* rightWall_ptr = new Plane(Point3D(room_size, 0, 0), Normal(-1, 0, 0));
+    rightWall_ptr->set_material(matte_ptr4);        
+    add_object(rightWall_ptr);
+    
+    double mirror_size 	= 8;
+    double offset 		= 1.0;
+    
+    Reflective* reflective_ptr2 = new Reflective;			
+    reflective_ptr2->set_ka(0); 
+    reflective_ptr2->set_kd(0);
+    reflective_ptr2->set_cd(0); 
+    reflective_ptr2->set_ks(0);
+    reflective_ptr2->set_kr(0.85);
+    reflective_ptr2->set_cr(1);
+    
+    Point3D p0;
+    Vector3D a, b;
+    
+    p0 = Point3D(-mirror_size, -mirror_size, -(room_size - offset));
+    a = Vector3D(2.0 * mirror_size, 0, 0);
+    b = Vector3D(0, 2.0 * mirror_size, 0);
+    Normal n(0, 0, 1);
+    Rectangle* rectangle_ptr1 = new Rectangle(p0, a, b, n);
+    rectangle_ptr1->set_material(reflective_ptr2); 
+    add_object(rectangle_ptr1);
+    
+    p0 = Point3D(-mirror_size, -mirror_size, +(room_size - offset));
+    n = Normal(0, 0, -1);
+    Rectangle* rectangle_ptr2 = new Rectangle(p0, a, b, n);
+    rectangle_ptr2->set_material(reflective_ptr2); 
+    add_object(rectangle_ptr2);
+    
+    p0 = Point3D(-(room_size - offset), -mirror_size, +mirror_size);
+    a = Point3D(0, 0, -2.0 * mirror_size);
+    n = Normal(1, 0, 0);
+    Rectangle* rectangle_ptr3 = new Rectangle(p0, a, b, n);
+    rectangle_ptr3->set_material(reflective_ptr2); 
+    add_object(rectangle_ptr3);
+    
+    Reflective* reflective_ptr3 = new Reflective;			
+    reflective_ptr3->set_ka(0); 
+    reflective_ptr3->set_kd(0);
+    reflective_ptr3->set_cd(0); 
+    reflective_ptr3->set_ks(0);
+    reflective_ptr3->set_kr(1);
+    reflective_ptr3->set_cr(1, 1, 1);
+    
+    Plane* floor_ptr = new Plane(Point3D(0, -room_size,  0), Normal(0, 1, 0));
+    floor_ptr->set_material(reflective_ptr3);        
+    add_object(floor_ptr);
+     */
 }
 
 /*
@@ -697,7 +833,7 @@ World::clamp_to_color(const RGBColor &raw_color) const
     }
      */
 
-
+/*
 void World::display() const
 {
     SDL_Surface *image = NULL;
@@ -722,16 +858,15 @@ void World::display() const
     
     SDL_WM_SetCaption("TinyRay", NULL);
     
-    image = IMG_Load("/Users/eyefrog/Desktop/image.bmp");
+    image = IMG_Load("/Users/eyefrog/Desktop/image.png");
     
     if (image == NULL) {
         SDL_Quit();
-        fprintf(stderr, "IMG_Load failed\n");        return;
+        fprintf(stderr, "IMG_Load failed\n");
+        return;
     }
     
     SDL_BlitSurface(image, NULL, screen, NULL);
-    
-    //SDL_UpdateRect(screen, 0, 0, image->w, image->h); 
     
     SDL_Flip( screen );
     
@@ -748,7 +883,7 @@ void World::display() const
 
     SDL_Quit();
 }
-
+*/
 
 ShadeRec World::hit_bare_bones_objects(const Ray &ray)
 {

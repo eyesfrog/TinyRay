@@ -66,7 +66,6 @@ Pinhole::render_scene(const World& w)
     //int depth = 0;
     Point2D pp;
     Point2D sp;
-    //int n = int(sqrt(float(vp.num_samples)));
     
     vp.s /= zoom;
     
@@ -81,7 +80,7 @@ Pinhole::render_scene(const World& w)
             for (int j = 0; j < vp.num_samples; ++j) {
                 sp = w.vp.sampler_ptr->sample_unit_square();
                 pp.x = vp.s * (c - 0.5 * vp.hres + sp.x);
-                pp.y = vp.s * (r - 0.5 * vp.vres + sp.y); 
+                pp.y = vp.s * (r - 0.5 * vp.vres + sp.y);
                 ray.d = get_direction(pp);
                 L += w.tracer_ptr->trace_ray(ray);
             }

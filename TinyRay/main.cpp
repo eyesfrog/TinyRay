@@ -7,6 +7,6 @@ int main(void)
     //w.render_perspective();
     //w.render_scene();
     w.camera_ptr->render_scene(w);
-    w.display();
+    //w.display();
 	return 0;
 }

@@ -56,7 +56,7 @@ public:
     RGBColor
     clamp_to_color(const RGBColor& c) const;
 
-    void display() const;
+    //void display() const;
     
     ShadeRec hit_object(const Ray& ray);
     
