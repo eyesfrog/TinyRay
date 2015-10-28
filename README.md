@@ -9,6 +9,9 @@ More advanced functions and features are to be added.
 
 ## Gallery
 Here's some pictures rendered by TinyRay.
+
+![MultiBall](https://raw.githubusercontent.com/eyesfrog/TinyRay/blob/master/pictures/MultiBall.png)
+
 Enjoy  :)
 
 
